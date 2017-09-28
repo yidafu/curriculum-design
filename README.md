@@ -18,7 +18,7 @@ C 语言课程设计。
 ## 参考
 +   [廖雪峰的git教程](https://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000/001373962845513aefd77a99f4145f0a2c7a7ca057e7570000)
 +   [编码规范](https://github.com/yidafu/curriculum-design/blob/master/doc/code-style.md)
-+   [注释说明](https://github.com/yidafu/curriculum-design/blob/master/doc/comment.md)
++  [注释说明](https://github.com/yidafu/curriculum-design/blob/master/doc/comment.md)
 +   [CLion下载地址](https://www.jetbrains.com/clion/)
 
 ## 开发日程安排

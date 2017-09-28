@@ -31,7 +31,7 @@
 * @param int param2 传入的要相加的第二个数
 * @return int       两数相加的结果
 * calling:
-* called: man()
+* called: main()
 */
 int test_function ( int param1, int param2 ) {
     // 假设这是关键步骤
