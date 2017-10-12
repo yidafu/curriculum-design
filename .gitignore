@@ -1,0 +1,9 @@
+nu1
+
+doc/*.pdf
+
+CMakeLists.txt
+.idea/
+cmake-build-debug/
+
+*.doc
