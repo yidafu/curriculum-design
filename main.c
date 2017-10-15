@@ -6,7 +6,7 @@
 #include "library.h"
 
 int main () {
-    printf("test msg!");
+    file_test();
     return 0;
 //    bool test = true;
 }
