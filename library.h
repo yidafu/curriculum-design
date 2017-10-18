@@ -4,56 +4,42 @@
 
 #ifndef CURRICULUM_DESIGN_LIBRARY_H
 #define CURRICULUM_DESIGN_LIBRARY_H
+#define bool int
 #define false 0
 #define true 1
 #define elem_type int
 
 
-void file_test();
-//
-//typedef int bool;
-//
-//typedef struct {
-//    int no;
-//    char *name;
-//    int category;
-//    char *press;
-//    float price;
-//    bool can_borrow;
-//    int remain;
-//} book ;
-//
-//typedef struct {
-//    int year;
-//    int month;
-//    int day;
-//} my_time;
-//
-//typedef struct {
-//    int history_id;
-//    char *borrow_by;
-//    char *book_name;
-//    my_time *borrow_time;
-//    my_time *return_time;
-//} borrow_history;
-//
+
+
+
+typedef struct {
+    int no;
+    char *name;
+    int category;
+    char *press;
+    float price;
+    bool can_borrow;
+    int remain;
+} book ;
+
 //typedef struct {
 //    int no;
 //    char *name;
 ////    int class;
 //};
-//
-//typedef struct {
-//    struct  Node *next;
-//    elem_type data;
-//} Node;
-//
-//typedef struct {
-//    Node *head;
-//    Node *tail;
-//    int length;
-//} link_list;
-//
+
+typedef struct {
+    struct  Node *next;
+    elem_type data;
+} Node;
+
+typedef struct {
+    Node *head;
+    Node *tail;
+    int length;
+} link_list;
+
 //// 界面
 //void bootstrap()
 //void welcome_admin();

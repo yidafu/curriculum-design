@@ -4,7 +4,7 @@
 
 #include <stdio.h>
 #include "library.h"
-
+#include "test.h"
 int main () {
     file_test();
     return 0;

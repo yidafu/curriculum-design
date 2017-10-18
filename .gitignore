@@ -7,3 +7,5 @@ CMakeLists.txt
 cmake-build-debug/
 
 *.doc
+
+linkList2.c
