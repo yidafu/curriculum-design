@@ -8,14 +8,14 @@
 #include <stdlib.h>
 #include "link_list_history.h"
 
-void init_list_history(link_list_history *l){
-    l -> length = 0;
-    l -> head = l -> tail = (node_history *)malloc(sizeof(node_history));
-    l -> head -> next = NULL;
+void init_list_history(link_list_history *list){
+    list -> length = 0;
+    list -> head = list -> tail = (node_history *)malloc(sizeof(node_history));
+    list -> head -> next = NULL;
 }
 
-bool list_insert_history(link_list_history *l,int i,history *e){
-    if(i>=l->length+1||i<1)
+bool list_insert_history(link_list_history *list,int i,history *e){
+    if(i>=list->length+1||i<1)
         return false;
     node_history *p,*q;
     p = (node_history *)malloc(sizeof(node_history));
@@ -23,65 +23,65 @@ bool list_insert_history(link_list_history *l,int i,history *e){
     node_history new_node;
     q = &new_node;
     q -> data = *e;
-    p = l->head;
+    p = list->head;
     while(k<i){
         p = p -> next;
         k++;
     }
     p -> next = q;
     q -> next = p -> next;
-    if(i==l->length+1)
-        l->tail = q;
+    if(i==list->length+1)
+        list->tail = q;
     return true;
 }
 
-bool list_delete_history(link_list_history *l,int i){
+bool list_delete_history(link_list_history *list,int i){
     node_history *p,*q;
     int k = 1;
-    p = l->head;
-    if(i>l->length||i<1)
+    p = list->head;
+    if(i>list->length||i<1)
         return false;
     while(k<i){
         p = p -> next;
         k++;
     }
     q = p -> next;
-    if(q==l->tail)
-        l->tail = p;
+    if(q==list->tail)
+        list->tail = p;
     p -> next = q -> next;
     free(q);
     return true;
 }
 
-void clear_list_history(link_list_history *l){
+void clear_list_history(link_list_history *list){
     node_history *p,*q;
-    l->length = 0;
-    p = l->head -> next;
+    list->length = 0;
+    p = list->head -> next;
     while(p) {
         q = p;
         p = p -> next;
         free(q);
     }
-    l -> tail = l -> head;
-    l-> head -> next = NULL;
+    list -> tail = list -> head;
+    list-> head -> next = NULL;
 }
 
-void destroy_list_history(link_list_history *l){
-    clear_list_history(l);
-    free(l->head);
-    l -> tail = l -> head = NULL;
+void destroy_list_history(link_list_history *list){
+    clear_list_history(list);
+    free(list->head);
+    list -> tail = list -> head = NULL;
 }
 
-bool list_empty_history(link_list_history *l){
-    if(l->length==0)
+bool list_empty_history(link_list_history *list){
+    if(list->length==0)
         return true;
     return false;
 }
 
-int locate_list_history(link_list_history *l,history e,int(*compare)(history a,history b)){
+int locate_list_history(link_list_history *list,history e,int(*compare)(history a,history b)){
     int i = 1;
     node_history *p,*q;
-    p = l->head -> next;
+    p = list->head -> next;
     while(p&&compare(p->data,e)==false){
         p = p -> next;
         i++;
@@ -89,16 +89,16 @@ int locate_list_history(link_list_history *l,history e,int(*compare)(history a,h
     return i;
 }
 
-int list_length_history(link_list_history *l){
-    return l->length;
+int list_length_history(link_list_history *list){
+    return list->length;
 }
 
-bool get_elem_history(link_list_history *l,int i,history *e){
-    if(i<1||i>l->length)
+bool get_elem_history(link_list_history *list,int i,history *e){
+    if(i<1||i>list->length)
         return false;
     node_history *p;
 
-    p = l -> head -> next;
+    p = list -> head -> next;
     int k = 1;
     while(k<i){
         p = p -> next;
@@ -108,21 +108,21 @@ bool get_elem_history(link_list_history *l,int i,history *e){
     return true;
 }
 
-void list_append__history(link_list_history *l,history *e){
+void list_append_history(link_list_history *list,history *e){
     node_history *p;
     p = (node_history *)malloc(sizeof(node_history));
     p -> data = *e;
-    l -> tail -> next = p;
-    l -> tail = p;
+    list -> tail -> next = p;
+    list -> tail = p;
     p -> next = NULL;
-    l -> length ++ ;
+    list -> length ++;
 }
 
-void list_traverse_history(link_list_history l,void(*visit)(history e)){
+void list_traverse_history(link_list_history list,void(*visit)(history *e)){
     node_history *p;
-    p = l.head;
+    p = list.head;
     while(p){
-        visit(p->data);
+        visit(&p->data);
         p = p -> next;
     }
 }

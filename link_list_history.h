@@ -39,6 +39,7 @@ bool list_empty_history(link_list_history *list);
 int locate_list_history(link_list_history *list,history e,int(*compare)(history a,history b));
 int list_length_history(link_list_history *list);
 bool get_elem_history(link_list_history *list,int i,history *e);
+void list_traverse_history(link_list_history list,void(*visit)(history *e));
 void list_append_history(link_list_history *list,history *e);
 
 #endif //CURRICULUM_DESIGN_LINK_LIST_HISTORY_H

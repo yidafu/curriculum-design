@@ -32,7 +32,7 @@ int strpos(char *haystcak,char needle , int offset) {
  * @param length 拷贝的长度，必须大于 1
  * @return char* 截取的字符串首地址，失败返回 NULL
  */
-char * substr(char *string, int start, size_t length ) {
+char * substr(char *string, int start, int length ) {
     char *p = string,*to_return , *q;
     to_return = q = NULL;
     // 输入值过滤
@@ -45,18 +45,18 @@ char * substr(char *string, int start, size_t length ) {
         p ++;
         index ++;
     }
-    index = 0;
-    size_t remain_len = strlen(p);
+    int remain_len = strlen(p);
     to_return = q = malloc( remain_len * sizeof(char));
 
     // + 1 是为 \0 留出位置
     length = length ? (length + 1) : (remain_len + 1);
 
+    index = 1;
     while( index < length ) {
         *q = *p ++ ;
         q ++;
         index ++;
     }
-    *(++ q) = '\0';
+    *q = '\0';
     return to_return;
 }

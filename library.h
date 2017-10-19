@@ -12,16 +12,16 @@
 
 
 
-
-typedef struct {
-    int no;
-    char *name;
-    int category;
-    char *press;
-    float price;
-    bool can_borrow;
-    int remain;
-} book ;
+//
+//typedef struct {
+//    int no;
+//    char *name;
+//    int category;
+//    char *press;
+//    float price;
+//    bool can_borrow;
+//    int remain;
+//} book ;
 
 //typedef struct {
 //    int no;
