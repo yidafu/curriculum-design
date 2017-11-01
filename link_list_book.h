@@ -11,10 +11,10 @@ typedef struct book{
     int book_no; // 三个字符，如：001
     char *name;
     int category;
-    char *press;
-    float price;
+    int price;
     bool can_borrow;
     int remain;
+    char *press;
 } book;
 
 
@@ -39,5 +39,5 @@ int locate_list_book(link_list_book *list,book e,int(*compare)(book a,book b));
 int list_length_book(link_list_book *list);
 bool get_elem_book(link_list_book *list,int i,book *e);
 void list_append_book(link_list_book *list,book *e);
-void list_traverse_book(link_list_book list,void(*visit)(book *e));
+void list_traverse_book(link_list_book *list,void(*visit)(book *e));
 #endif //CURRICULUM_DESIGN_LINK_LIST_BOOK_LIST_H

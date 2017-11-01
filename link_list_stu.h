@@ -30,6 +30,6 @@ bool list_empty_stu(link_list_stu *list);
 int locate_list_stu(link_list_stu *list,student e,int(*compare)(student a,student b));
 int list_length_stu(link_list_stu list);
 bool get_elem_stu(link_list_stu *list,int i,student *e);
-void list_append_stu(link_list_stu *list,student e);
+void list_append_stu(link_list_stu *list,student *e);
 void list_traverse_stu( link_list_stu *list, void(*visit)( student *e ) );
 #endif //CURRICULUM_DESIGN_LINK_LIST_STU_H

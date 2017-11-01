@@ -118,9 +118,9 @@ void list_append_history(link_list_history *list,history *e){
     list -> length ++;
 }
 
-void list_traverse_history(link_list_history list,void(*visit)(history *e)){
+void list_traverse_history(link_list_history *list,void(*visit)(history *e)){
     node_history *p;
-    p = list.head;
+    p = list->head->next;
     while(p){
         visit(&p->data);
         p = p -> next;

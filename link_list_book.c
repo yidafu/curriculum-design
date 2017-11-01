@@ -116,9 +116,9 @@ void list_append_book(link_list_book *list,book *e){
     list -> length ++;
 }
 
-void list_traverse_book(link_list_book list,void(*visit)(book *e)){
+void list_traverse_book(link_list_book *list,void(*visit)(book *e)){
     node_book *p;
-    p = list.head;
+    p = list->head->next;
     while(p){
         visit( &p->data );
         p = p -> next;

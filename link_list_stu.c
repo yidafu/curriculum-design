@@ -107,10 +107,10 @@ bool get_elem_stu(link_list_stu *list,int i,student *e){
     return true;
 }
 
-void list_append_stu(link_list_stu *list,student e){
+void list_append_stu(link_list_stu *list,student *e){
     node_stu *p;
     p = (node_stu *)malloc(sizeof(node_stu));
-    p -> data = e;
+    p -> data = *e;
     list -> tail -> next = p;
     list -> tail = p;
     p -> next = NULL;
@@ -119,7 +119,7 @@ void list_append_stu(link_list_stu *list,student e){
 
 void list_traverse_stu(link_list_stu *list,void(*visit)(student *e)){
     node_stu *p;
-    p = list->head;
+    p = list->head->next;
     while(p){
         visit( &p->data );
         p = p -> next;

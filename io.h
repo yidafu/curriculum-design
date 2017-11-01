@@ -14,4 +14,6 @@ bool io_input_histroy( link_list_history *history_list);
 bool io_input_book_list( link_list_book *book_list);
 
 void io_output_student( link_list_stu *stu_list );
+void io_output_book( link_list_book *book_list );
+void io_output_history( link_list_history *history_list );
 #endif //CURRICULUM_DESIGN_IO_H
