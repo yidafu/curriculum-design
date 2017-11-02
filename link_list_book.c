@@ -13,21 +13,22 @@ void init_list_book(link_list_book *list){
 }
 
 bool list_insert_book(link_list_book *list,int i,book *e){
-    if(i>=list->length+1||i<1)
+    if( i > list->length + 1 || i < 1 )
         return false;
     node_book *p,*q;
-    p = (node_book *)malloc(sizeof(node_book));
+//    p = (node_book *)malloc(sizeof(node_book));
     int k = 1;
     node_book new_node;
     q = &new_node;
     q -> data = *e;
     p = list->head;
-    while(k<i){
+    while( k < i ) {
         p = p -> next;
         k++;
     }
+    q->next = p->next;
     p -> next = q;
-    q -> next = p -> next;
+    // 修正尾指针
     if(i==list->length+1)
         list->tail = q;
     return true;

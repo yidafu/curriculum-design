@@ -22,7 +22,7 @@ typedef struct {
 } link_list_stu;
 
 void init_list_stu(link_list_stu *list);
-bool list_insert_stu(link_list_stu *list,int i,student e);
+bool list_insert_stu(link_list_stu *list,int i,student *e);
 bool list_delete_stu(link_list_stu *list,int i);
 void clear_list_stu(link_list_stu *list);
 void destroy_list_stu(link_list_stu *list);

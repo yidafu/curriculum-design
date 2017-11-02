@@ -15,21 +15,22 @@ void init_list_history(link_list_history *list){
 }
 
 bool list_insert_history(link_list_history *list,int i,history *e){
-    if(i>=list->length+1||i<1)
+    if( i > list->length + 1 || i < 1 )
         return false;
     node_history *p,*q;
-    p = (node_history *)malloc(sizeof(node_history));
+//    p = (node_book *)malloc(sizeof(node_book));
     int k = 1;
     node_history new_node;
     q = &new_node;
     q -> data = *e;
     p = list->head;
-    while(k<i){
+    while( k < i ) {
         p = p -> next;
         k++;
     }
+    q->next = p->next;
     p -> next = q;
-    q -> next = p -> next;
+    // 修正尾指针
     if(i==list->length+1)
         list->tail = q;
     return true;

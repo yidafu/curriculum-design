@@ -69,6 +69,7 @@ bool io_input_student( link_list_stu *stu_list) {
 
         list_append_stu( stu_list, &to_insert);
     }
+//    close(fp);
     return true;
 }
 
@@ -229,6 +230,7 @@ void stu_visit(student *stu ){
     fputc( ',', fp_stu );
     fputs( stu->name, fp_stu );
 //    fputc( '\n', fp_stu );
+    fflush( fp_stu );
 }
 
 /**
