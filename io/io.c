@@ -6,40 +6,12 @@
 #include <stdio.h>
 #include <mem.h>
 #include <stdlib.h>
-#include "library.h"
-#include "phpstr.h"
-#include "test.h"
-#include "link_list_stu.h"
-#include "link_list_history.h"
+#include "../library.h"
+#include "../linklist/phpstr.h"
+#include "../linklist/link_list_stu.h"
+#include "../linklist/link_list_history.h"
 #include "io.h"
-#include "link_list_book.h"
-
-/**
- * IO 测试函数
- * @return void
- */
-void file_test() {
-    link_list_stu list_stu;
-    init_list_stu( &list_stu );
-    io_input_student( &list_stu );
-
-    link_list_history list_history;
-    init_list_history(&list_history);
-    io_input_histroy( &list_history );
-
-    link_list_book list_book;
-    init_list_book( &list_book );
-    io_input_book_list( &list_book );
-
-
-    io_output_student( &list_stu );
-    io_output_book( &list_book );
-    io_output_history( &list_history );
-
-    destroy_list_book( &list_book );
-    destroy_list_history( &list_history );
-    destroy_list_stu( &list_stu );
-}
+#include "../linklist/link_list_book.h"
 
 /**
  * 读取 student.txt 里面的数据
@@ -54,7 +26,7 @@ bool io_input_student( link_list_stu *stu_list) {
     }
     char line[80];
     while ( !feof(fp) ) {
-        fgets(line,80,fp) ;
+        fgets(line,80,fp);
         /// !!! IMPORTENT 文件里面不能有空行
         int cutPos = strpos(line , ',',0);
         char stu_no[5];
@@ -63,13 +35,22 @@ bool io_input_student( link_list_stu *stu_list) {
         strncpy(stu_no,line,(size_t) tmp );
         stu_name          = substr(line,cutPos,0);
         int stu_no_insert = atoi(stu_no);
-        student to_insert = {
-                            stu_no_insert,
-                            stu_name};
+        student to_insert = { stu_no_insert,
+                              stu_name
+                            };
 
         list_append_stu( stu_list, &to_insert);
     }
-//    close(fp);
+    // 修正读取会重复读取最后一行的 bug
+    node_stu *p = stu_list->head->next;
+    while( p->next->next ) {
+        p = p->next;
+    }
+    node_stu *q = p->next;
+    p->next = NULL;
+    stu_list->tail = p;
+    free( q );
+    fclose(fp);
     return true;
 }
 
@@ -94,6 +75,7 @@ bool io_input_histroy( link_list_history *history_list) {
         int cut_len = 0;
         int cut_pos1 = strpos(line , ',',0);
         char *history_id;
+        
         cut_len             = cut_pos1 - 1;
         history_id          = substr(line, 0, cut_len ); // 长度定死了
         int history_id_int  = strtol( history_id, NULL, 10 );
@@ -105,61 +87,56 @@ bool io_input_histroy( link_list_history *history_list) {
         int cut_pos3      = strpos( line, ',', cut_pos2 );
         cut_len           = cut_pos3 - cut_pos2 - 1;
         char *borrow_time = substr(line, cut_pos3, cut_len);
-        my_time borrow_time_stc;
-        {
-            int time_pos1 = strpos( borrow_time, '/',0);
-            int time_cut_len = time_pos1 - 1;
-            char *year_str = substr( borrow_time, 0, time_cut_len );
-            int year = (int)strtol( year_str, NULL, 10 );
-            borrow_time_stc.year =  year;
-
-            int time_pos2 = strpos(borrow_time, '/', time_pos1);
-            time_cut_len = time_pos2 - time_pos1 - 1 ;
-            char *month_str = substr(borrow_time, time_pos1, time_cut_len);
-            int month = strtol( month_str, NULL, 10 );
-            borrow_time_stc.month = month;
-
-            char *day_str = substr( borrow_time, time_pos2, 0 );
-            int day = strtol( day_str, NULL, 10 );
-            borrow_time_stc.day = day;
-        }
 
         int cut_pos4    = strpos( line, ',', cut_pos3 );
-        cut_len = cut_pos4 - cut_pos3;
+        cut_len = cut_pos4 - cut_pos3 - 1;
         char *return_time = substr(line, cut_pos3, cut_len );
-        my_time return_time_stc;
-        {
-            int time_pos1 = strpos( return_time, '/',0);
-            int time_cut_len = time_pos1 - 1;
-            char *year_str = substr( return_time, 0, time_cut_len );
-            int year = (int)strtol( year_str, NULL, 10 );
-            return_time_stc.year = year;
 
-            int time_pos2 = strpos(return_time, '/', time_pos1);
-            time_cut_len = time_pos2 - time_pos1 - 1 ;
-            char *month_str = substr(return_time, time_pos1, time_cut_len);
-            int month = strtol( month_str, NULL, 10 );
-            return_time_stc.month = month;
-
-            char *day_str = substr( return_time, time_pos2, 0 );
-            int day = strtol( day_str, NULL, 10 );
-            return_time_stc.day = day;
-        }
 
         char *book_name = substr(line, cut_pos4, 0 );
 
-        history to_append = {history_id_int,name, book_name, &borrow_time_stc, &return_time_stc};
+        history to_append = {history_id_int,name, borrow_time, return_time, book_name};
         list_append_history( history_list, &to_append);
     }
+    // 修正读取会重复读取最后一行的 bug
+    node_history *p = history_list->head->next;
+    while( p->next->next ) {
+        p = p->next;
+    }
+    node_history *q = p->next;
+    p->next = NULL;
+    history_list->tail = p;
+    free( q );
+    fclose(fp);
     return true;
 }
-
-
 /**
- * 将链表中的书目数据写入到文件里面去
- * @param 存放书目数据的链表
- * @return
+ * 时间解析函数，将时间字符串，转换 my_time 格式的结构体
+ * @param time_str 要转换时间字符串
+ * @return my_time 类型的结构体指针
  */
+my_time parse_time( char *time_str ) {
+    my_time return_time_stc;
+
+    int time_pos1 = strpos( time_str, '/',0);
+    int time_cut_len = time_pos1 - 1;
+    char *year_str = substr( time_str, 0, time_cut_len );
+    int year = (int)strtol( year_str, NULL, 10 );
+    return_time_stc.year = year;
+
+    int time_pos2 = strpos( time_str, '/', time_pos1);
+    time_cut_len = time_pos2 - time_pos1 - 1 ;
+    char *month_str = substr( time_str, time_pos1, time_cut_len);
+    int month = strtol( month_str, NULL, 10 );
+    return_time_stc.month = month;
+
+    char *day_str = substr( time_str, time_pos2, 0 );
+    int day = strtol( day_str, NULL, 10 );
+    return_time_stc.day = day;
+
+    return return_time_stc;
+}
+
 /**
  * 读取 book_list.txt 里面的数据
  * @param book_list 存放书目的链表
@@ -195,7 +172,7 @@ bool io_input_book_list( link_list_book *book_list) {
         int cut_pos4 = strpos( line, ',', cut_pos3 );
         cut_len      = cut_pos4 - cut_pos3 - 1;
         char *can_borrow = substr( line, cut_pos3, cut_len );
-        bool borrow_bool = strcmp( "yes", can_borrow ) ? true : false;
+        bool borrow_bool = ! strcmp( "yes", can_borrow ) ? true : false;
 
         int cut_pos5  = strpos( line, ',', cut_pos4);
         cut_len       = cut_pos5 - cut_pos4 - 1;
@@ -220,8 +197,24 @@ bool io_input_book_list( link_list_book *book_list) {
 
         list_append_book( book_list, &to_append);
     }
+    // 修正读取会重复读取最后一行的 bug
+    node_book *p = book_list->head->next;
+    while( p->next->next ) {
+        p = p->next;
+    }
+    node_book *q = p->next;
+    p->next = NULL;
+    book_list->tail = p;
+    free( q );
+    fclose(fp);
     return true;
 }
+
+/**
+ * 作为遍历函数的参数
+ * 写入 stu 的数据到数据存储文件里面去
+ * @param stu 要写入文件的学社数据
+ */
 void stu_visit(student *stu ){
     extern FILE *fp_stu;
     char stu_no[5];
@@ -234,8 +227,8 @@ void stu_visit(student *stu ){
 }
 
 /**
- *
- * @param stu_list
+ * 把链表里面的学生数据写入到文件里面去
+ * @param stu_list 存放学生信息的链表
  */
 void io_output_student( link_list_stu *stu_list ) {
     extern FILE *fp_stu;
@@ -245,6 +238,11 @@ void io_output_student( link_list_stu *stu_list ) {
     list_traverse_stu( stu_list, stu_visit );
 }
 
+/**
+ * 作为链表遍历函数的参数
+ * 写入 book 的数据到数据存储文件里面去
+ * @param stu 要写入到文件的数据
+ */
 void book_visit(book *book ) {
     extern FILE *fp_book;
 
@@ -261,14 +259,16 @@ void book_visit(book *book ) {
     fputs( book_category, fp_book );
     fputc(',', fp_book );
 
+    char *can_borrow = book->can_borrow ? "yes" : "no";
+    fputs( can_borrow, fp_book );
+    fputc(',', fp_book );
+
     char book_price[5];
     itoa( book->price , book_price, 10 );
     fputs( book_price, fp_book );
     fputc(',', fp_book );
 
-    char *can_borrow = book->can_borrow ? "yes" : "no";
-    fputs( can_borrow, fp_book );
-    fputc(',', fp_book );
+
 
     char book_remain[5];
     itoa( book->remain, book_remain, 10 );
@@ -276,11 +276,12 @@ void book_visit(book *book ) {
     fputc(',', fp_book );
 
     fputs( book->press, fp_book );
+    fflush( fp_book );
 }
 
 /**
- *
- * @param book_list
+ * 把链表里面的书籍数据写入到文件里面去
+ * @param book_list 存放书目信息的链表
  */
 void io_output_book( link_list_book *book_list ) {
     extern FILE *fp_book;
@@ -290,6 +291,11 @@ void io_output_book( link_list_book *book_list ) {
     list_traverse_book( book_list, book_visit);
 }
 
+/**
+ * 作为链表遍历函数的参数
+ * 写入 history 的数据到数据存储文件里面去
+ * @param stu 要写入到文件的数据
+ */
 void history_visit( history *history ) {
     extern FILE *fp_history;
 
@@ -301,39 +307,19 @@ void history_visit( history *history ) {
     fputs( history->borrow_by, fp_history );
     fputc( ',', fp_history );
 
-//    fputs( history->book_name, fp_history );
-//    fputc( ',', fp_history );
-
-    char year_str[6];
-    itoa( history->borrow_time->year, year_str, 10 );
-    fputs( year_str, fp_history );
-    fputc( '/', fp_history );
-    char month_str[3];
-    itoa( history->borrow_time->month, month_str, 10 );
-    fputs( month_str, fp_history );
-    fputc( '/', fp_history );
-    char day_str[3];
-    itoa( history->borrow_time->day, day_str, 10 );
-    fputs( day_str, fp_history );
+    fputs( history->borrow_time, fp_history );
     fputc( ',', fp_history );
 
-
-    itoa( history->return_time->year, year_str, 10 );
-    fputs( year_str, fp_history );
-    fputc( '/', fp_history );
-    itoa( history->return_time->month, month_str, 10 );
-    fputs( month_str, fp_history );
-    fputc( '/', fp_history );
-    itoa( history->return_time->day, day_str, 10 );
-    fputs( day_str, fp_history );
+    fputs( history->return_time, fp_history );
     fputc( ',', fp_history );
 
     fputs( history->book_name, fp_history );
-
+    fflush( fp_history );
 }
+
 /**
- *
- * @param history_list
+ * 把链表里面的借阅历史数据写入到文件里面去
+ * @param history_list 存放借阅历史的链表
  */
 void io_output_history( link_list_history *history_list ) {
     extern FILE *fp_history;
